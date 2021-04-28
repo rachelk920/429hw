@@ -4,7 +4,14 @@
 // For example, sumAll([4,1]) should return 10 because sum of all the numbers between 1 and 4 (both inclusive) is 10.
 
 function sumAll(arr) {
-    return 1;
+  var max = Math.max(arr[0], arr[1]);
+  var min = Math.min(arr[0], arr[1]);
+  var temp = 0;
+  for(var i = min; i<= max; i++){
+    temp += i;
+    6+4
+  }
+  return temp;
   }
   
   sumAll([1, 4]);
@@ -15,12 +22,25 @@ function sumAll(arr) {
 // Note
 // You can return the array with its elements in any order.
 function diffArray(arr1, arr2) {
-    var newArr = [];
-    return newArr;
-  }
-  
-  diffArray([1, 2, 3, 5], [1, 2, 3, 4, 5]);
+  var newArr = [];
 
+  function onlyInFirst(first, second) {
+    // Looping through an array to find elements that don't exist in another array
+    for (var i = 0; i < first.length; i++) {
+      if (second.indexOf(first[i]) === -1) {
+        // Pushing the elements unique to first to newArr
+        newArr.push(first[i]);
+      }
+    }
+  }
+
+  onlyInFirst(arr1, arr2);
+  onlyInFirst(arr2, arr1);
+
+  return newArr;
+}
+
+diffArray([1, 2, 3, 5], [1, 2, 3, 4, 5]);
 //   3 Intermediate Algorithm Scripting: Seek and Destroy
 // You will be provided with an initial array (the first argument in the destroyer function), followed by one or more arguments. Remove all elements from the initial array that are of the same value as these arguments.
 
@@ -28,7 +48,17 @@ function diffArray(arr1, arr2) {
 // You have to use the arguments object.
 
 function destroyer(arr) {
-    return arr;
+   var args = Array.prototype.slice.call(arguments);
+   for(var i = 0; i < arr.length; i++){
+     for(var j = 0; j < args.length; j++){
+       if(arr[i] === args[j]){
+         delete arr[i];
+       }
+     }
+   }
+  
+   return arr.filter(Boolean);
+
   }
   
   destroyer([1, 2, 3, 1, 2, 3], 2, 3);
@@ -40,12 +70,19 @@ function destroyer(arr) {
 // For example, if the first argument is [{ first: "Romeo", last: "Montague" }, { first: "Mercutio", last: null }, { first: "Tybalt", last: "Capulet" }], and the second argument is { last: "Capulet" }, then you must return the third object from the array (the first argument), because it contains the name and its value, that was passed on as the second argument.
 
 function whatIsInAName(collection, source) {
-    var arr = [];
-    // Only change code below this line
-  
-  
-    // Only change code above this line
-    return arr;
+    var srcKeys = Object.keys(source);
+
+    return collection.filter(function(obj){
+      for(var i = 0; i < srcKeys.length; i++){
+        if(
+          // checking that the second argument does not match any keys on collection.
+          !obj.hasOwnProperty(srcKeys[i]) || obj[srcKeys[i]] !== source[srcKeys[i]]
+        ){
+          return false;
+        }
+      }
+      return true;
+    });
   }
   
   whatIsInAName([{ first: "Romeo", last: "Montague" }, { first: "Mercutio", last: null }, { first: "Tybalt", last: "Capulet" }], { last: "Capulet" });
@@ -53,10 +90,16 @@ function whatIsInAName(collection, source) {
 //   5.Intermediate Algorithm Scripting: Spinal Tap Case
 //   Convert a string to spinal case. Spinal case is all-lowercase-words-joined-by-dashes.
 function spinalCase(str) {
-    return str;
+  str = str.replace(/([a-z])([A-Z])/g, "$1 $2");
+
+    return str
+    .toLowerCase()
+    .split(/(?:_| )+/)
+    .join("-")
+
   }
   
-  spinalCase('This Is Spinal Tap');
+  spinalCase('This_Is Spinal Tap');
 
 
 
@@ -69,7 +112,12 @@ function spinalCase(str) {
 
 // Translate the provided string to Pig Latin. Input strings are guaranteed to be English words in all lowercase.
 function translatePigLatin(str) {
-    return str;
+    let consonantRegex = /^[^aeiou]+/;
+
+    let myConsonants = str.match(consonantRegex);
+
+return myConsonants !== null ? str.replace(consonantRegex, "").concat(myConsonants).concat('ay') : str.concat('way')
+
   }
   
   translatePigLatin("consonant");
@@ -88,10 +136,19 @@ function translatePigLatin(str) {
 // Preserve the case of the first character in the original word when you are replacing it. For example if you mean to replace the word "Book" with the word "dog", it should be replaced as "Dog"
 
 function myReplace(str, before, after) {
-    return str;
+  var index = str.indexOf(before);
+  if(str[index] === str[index].toUpperCase() ) {
+    after = after.charAt(0).toUpperCase() + after.slice(1);
+  } else {
+    after = after.charAt(0).toLowerCase() + after.slice(1);
+  }
+str = str.replace(before, after);
+
+  return str;
+
   }
   
-  myReplace("A quick brown fox jumped over the lazy dog", "jumped", "leaped");
+  myReplace("A quick brown fox jumped over the lazy dog", "Jumped", "leaped");
 
 
 
@@ -107,7 +164,30 @@ function myReplace(str, before, after) {
 
 // The character and its pair are paired up in an array, and all the arrays are grouped into one encapsulating array.
 function pairElement(str) {
-    return str;
+    var paired = [];
+
+    var search = function(char){
+      switch(char){
+        case "A":
+          paired.push(['A', 'T']);
+          break;
+        
+        case "T":
+          paired.push(['T', 'A']);
+          break;
+          case "C":
+            paired.push(["C", "G"]);
+            break;
+          case "G":
+            paired.push(["G", "C"]);
+            break;
+      }
+    };
+
+for(var i = 0; i < str.length; i++){
+  search(str[i])
+}
+  return paired;
   }
   
   pairElement("GCG");
@@ -117,7 +197,14 @@ function pairElement(str) {
 
 // If all letters are present in the range, return undefined.
 function fearNotLetter(str) {
-    return str;
+    for(var i = 0; i< str.length; i++){
+      var code = str.charCodeAt(i);
+      if(code !== str.charCodeAt(0) + i){
+        return String.fromCharCode(code - 1);
+      }
+    }
+  return undefined
+
   }
   
   fearNotLetter("abce");
@@ -133,7 +220,19 @@ function fearNotLetter(str) {
 // Check the assertion tests for examples.
 
 function uniteUnique(arr) {
-    return arr;
+  var finalArray = [];
+  // Making the function work with any number of arguments, not just three
+  for(var i = 0; i < arguments.length; i++){
+    var arrayArguments = arguments[i];
+// loops through the array at hand 
+    for(var j = 0; j < arrayArguments.length; j++){
+      var indexValue = arrayArguments[j];
+      if(finalArray.indexOf(indexValue) < 0){
+        finalArray.push(indexValue);
+      }
+    }
+  }
+  return finalArray;
   }
   
   uniteUnique([1, 3, 2], [5, 2, 1, 4], [2, 1]);
@@ -143,7 +242,30 @@ function uniteUnique(arr) {
 // Convert the characters &, <, >, " (double quote), and ' (apostrophe), in a string to their corresponding HTML entities.
 
 function convertHTML(str) {
-    return str;
+   var temp = str.split("");
+
+   for(var i =0; i < temp.length; i++){
+     switch(temp[i]){
+
+      case "<":
+        temp[i] = "&lt;";
+        break;
+      case "&":
+        temp[i] = '&amp;';
+        case ">":
+        temp[i] = "&gt;";
+        break;
+      case '"':
+        temp[i] = "&quot;";
+        break;
+      case "'":
+        temp[i] = "&apos;";
+        break;
+
+     }
+   }
+   temp = temp.join('');
+   return temp;
   }
   
   convertHTML("Dolce & Gabbana");
