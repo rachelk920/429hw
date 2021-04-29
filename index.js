@@ -279,9 +279,14 @@ function sumFibs(num) {
   var prevNum = 0;
   var currNum= 1;
   var result = 0;
-
-
-
+  while (currNum <= num){
+    if(currNum % 2 !== 0){
+      result += currNum;
+    }
+    currNum += prevNum;
+    prevNum = currNum - prevNum;
+  }
+    return result; 
   }
   
   sumFibs(4);
@@ -292,13 +297,24 @@ function sumFibs(num) {
 // A prime number is a whole number greater than 1 with exactly two divisors: 1 and itself. For example, 2 is a prime number because it is only divisible by 1 and 2. In contrast, 4 is not prime since it is divisible by 1, 2 and 4.
 
 // Rewrite sumPrimes so it returns the sum of all prime numbers that are less than or equal to num.
-
 function sumPrimes(num) {
-    return num;
+  // Helper function to check primality
+  function isPrime(num) {
+    for (let i = 2; i <= Math.sqrt(num); i++) {
+      if (num % i == 0)
+        return false;
+    }
+    return true;
   }
-  
-  sumPrimes(10);
 
+  // Check all numbers for primality
+  let sum = 0;
+  for (let i = 2; i <= num; i++) {
+    if (isPrime(i))
+      sum += i;
+  }
+  return sum;
+}
 //   14. Intermediate Algorithm Scripting: Smallest Common Multiple
 // Find the smallest common multiple of the provided parameters that can be evenly divided by both, as well as by all sequential numbers in the range between these parameters.
 
@@ -307,10 +323,33 @@ function sumPrimes(num) {
 // For example, if given 1 and 3, find the smallest common multiple of both 1 and 3 that is also evenly divisible by all numbers between 1 and 3. The answer here would be 6.
 
 function smallestCommons(arr) {
-    return arr;
+  // Sort from greatest to lowest num
+    arr.sort(function(a,b){
+      return b - a;
+    })
+// Create a new array and add all the values from greater to smaller from the original array
+    var newArr = []; 
+    for(var i = arr[0]; i>= arr[1]; i--){
+      newArr.push(i)
+    }
+// variables needed declared outside of the loop
+    var quot = 0;
+    var loop = 1;
+    var n;
+// Run the code while n is not the same as the array length
+    do{
+      quot = newArr[0] * loop * newArr[1];
+      for(n = 2; n < newArr.length; n++){
+        if(quot % newArr[n] !== 0){
+          break;
+        }
+      }
+      loop++;
+    } while (n !== newArr.length);
+      return quot;
   }
   
-  
+  // test with our function and array
   smallestCommons([1,5]);
 
 //   15. Intermediate Algorithm Scripting: Drop it
@@ -318,10 +357,18 @@ function smallestCommons(arr) {
   
 //   Then return the rest of the array once the condition is satisfied, otherwise, arr should be returned as an empty array.
 function dropElements(arr, func) {
+  var times = arr.length;
+  for(var i = 0; i < times; i++){
+    if(func(arr[0])){
+      break;
+    } else {
+      arr.shift();
+    }
+  }
     return arr;
   }
   
-  dropElements([1, 2, 3], function(n) {return n < 3; });
+  dropElements([1, 2, 3, 4], function(n) {return n >= 3; });
 
 
 
@@ -329,10 +376,26 @@ function dropElements(arr, func) {
 // Flatten a nested array. You must account for varying levels of nesting.
 
 function steamrollArray(arr) {
-    return arr;
+    var flatArray = [];
+
+      // Create function that adds an element if it is not an array.
+      // If it is an array, then loops through it and uses recursion on that array.
+      var flatten = function(arg){
+        if(!Array.isArray(arg)){
+          flatArray.push(arg);
+        } else{
+          for(var a in arg){
+            flatten(arg[a]);
+          }
+        }
+      };
+      // call the function on each element in the array
+      arr.forEach(flatten);
+      return flatArray;
+
   }
   
-  steamrollArray([1, [2], [3, [[4]]]]);
+  steamrollArray([1, [2], [3, [[4]]] ]);
 
 
 
@@ -341,7 +404,27 @@ function steamrollArray(arr) {
 
 // The binary string will be space separated.
 function binaryAgent(str) {
-    return str;
+  //  Separate the binary code by space
+  str = str.split(" ");
+  var power;
+  var decValue = 0;
+  var sentence = '';
+// check each binary number from the string
+  for(var s = 0; s < str.length; s++){
+    // check each bit from the binary number 
+    for(var t = 0; t < str[s].length; t++){
+      // Takes only the active bits(1) into consideration
+      if(str[s][t] == 1){
+        power = Math.pow(2, +str[s].length - t - 1);
+        decValue += power;
+      }
+    }
+// After the binary is converted to decimal, convert it to a string and store the value
+    sentence += String.fromCharCode(decValue);
+// Reset decimal value for next binary number
+    decValue = 0;
+  }
+    return sentence;
   }
   
   binaryAgent("01000001 01110010 01100101 01101110 00100111 01110100 00100000 01100010 01101111 01101110 01100110 01101001 01110010 01100101 01110011 00100000 01100110 01110101 01101110 00100001 00111111");
@@ -429,7 +512,7 @@ function orbitalPeriod(arr) {
   
   orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
 
-//   22JavaScript Algorithms and Data Structures Projects: Palindrome Checker
+//   22 JavaScript Algorithms and Data Structures Projects: Palindrome Checker
 // Return true if the given string is a palindrome. Otherwise, return false.
 
 // A palindrome is a word or sentence that's spelled the same way both forward and backward, ignoring punctuation, case, and spacing.
