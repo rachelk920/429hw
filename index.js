@@ -440,8 +440,16 @@ function binaryAgent(str) {
 // Remember, you can access object properties through either dot notation or [] notation.
 
 function truthCheck(collection, pre) {
-    return pre;
+  var counter = 0;
+  for (var c in collection) {
+    if (collection[c].hasOwnProperty(pre) && Boolean(collection[c][pre])) {
+      counter++;
+    }
   }
+
+  return counter == collection.length;
+}
+
   
   truthCheck([{"user": "Tinky-Winky", "sex": "male"}, {"user": "Dipsy", "sex": "male"}, {"user": "Laa-Laa", "sex": "female"}, {"user": "Po", "sex": "female"}], "sex");
 
@@ -461,7 +469,22 @@ function truthCheck(collection, pre) {
 // If either argument isn't a valid number, return undefined.
 
 function addTogether() {
-    return false;
+    var params = [].slice.call(arguments);
+  if(!params.every(function(param){
+    return typeof param === 'number';
+  })){
+    return undefined;
+  }
+    if(params.length === 2){
+      return params[0] + params[1];
+    }
+    else{
+      var firstParam = params[0];
+      var addOneMore=function(secondParam){
+        return addTogether(firstParam, secondParam);
+      };
+      return addOneMore;
+    }
   }
   
   addTogether(2,3);
@@ -481,16 +504,37 @@ function addTogether() {
 //   setFullName(firstAndLast)
 //   Run the tests to see the expected output for each method. The methods that take an argument must accept only one argument and it has to be a string. These methods must be the only available means of interacting with the object.
 var Person = function(firstAndLast) {
-    // Only change code below this line
-    // Complete the method below and implement the others similarly
-    this.getFullName = function() {
-      return "";
-    };
-    return firstAndLast;
+  var array = firstAndLast.split(' ');
+
+  this.getFirstName = function() {
+    return array[0];
   };
+
+  this.getLastName = function() {
+    return array[1];
+  };
+
+  this.getFullName = function() {
+    return array[0] + " " + array[1];
+  };
+
+  this.setFirstName = function(first) {
+    array[0] = first;
+  };
+
+  this.setLastName = function(last) {
+    array[1] = last;
+  };
+
+  this.setFullName = function(firstAndLast) {
+    var arraySplit = firstAndLast.split(" ");
+    this.setFirstName(arraySplit[0]);
+    this.setLastName(arraySplit[1]);
+  };
+};
   
   var bob = new Person('Bob Ross');
-  bob.getFullName();
+ 
 
 
 //   21 Intermediate Algorithm Scripting: Map the Debris
@@ -507,7 +551,13 @@ var Person = function(firstAndLast) {
 function orbitalPeriod(arr) {
     var GM = 398600.4418;
     var earthRadius = 6367.4447;
-    return arr;
+    
+    var newArray=[];
+    for(var i = 0; i < arr.length; i++){
+      var results = Math.round(2 * Math.PI*Math.sqrt(Math.pow(earthRadius+arr[i].avgAlt,3)/GM));
+      newArray.push({name:arr[i].name, orbitalPeriod: results});
+    }
+    return newArray;
   }
   
   orbitalPeriod([{name : "sputnik", avgAlt : 35873.5553}]);
@@ -524,7 +574,30 @@ function orbitalPeriod(arr) {
 // We'll also pass strings with special symbols, such as "2A3*3a2", "2A3 3a2", and "2_A3*3#A2".
 
 function palindrome(str) {
-    return true;
+  str = str.toLowerCase();
+
+
+  for(var i = 0; i < str.length; i++){
+    str=str.replace(' ', '');
+    str=str.replace(',','');
+    str=str.replace('.', '');
+    str=str.replace('/', '');
+    str=str.replace('_', '');
+    str=str.replace('-', '');
+    str=str.replace('(', '');
+    str=str.replace(')', '');
+  }
+    var copy = str.split('').reverse().join('');
+
+    if(copy == str){
+      return true;
+    }
+
+    else {
+      return false;
+    }
+
+    return str;
   }
   
   
