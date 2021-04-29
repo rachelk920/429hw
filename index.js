@@ -243,15 +243,14 @@ function uniteUnique(arr) {
 
 function convertHTML(str) {
    var temp = str.split("");
-
    for(var i =0; i < temp.length; i++){
      switch(temp[i]){
-
       case "<":
         temp[i] = "&lt;";
         break;
       case "&":
-        temp[i] = '&amp;';
+        temp[i] = '&amp;'; 
+        break;
         case ">":
         temp[i] = "&gt;";
         break;
@@ -261,13 +260,11 @@ function convertHTML(str) {
       case "'":
         temp[i] = "&apos;";
         break;
-
      }
    }
    temp = temp.join('');
    return temp;
   }
-  
   convertHTML("Dolce & Gabbana");
 
 
@@ -279,7 +276,12 @@ function convertHTML(str) {
 // For example, sumFibs(10) should return 10 because all odd Fibonacci numbers less than or equal to 10 are 1, 1, 3, and 5.
 
 function sumFibs(num) {
-    return num;
+  var prevNum = 0;
+  var currNum= 1;
+  var result = 0;
+
+
+
   }
   
   sumFibs(4);
